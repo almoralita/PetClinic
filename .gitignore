@@ -8,11 +8,5 @@ bin/
 .idea
 *.iml
 
-# VS Code
-.vscode
-
 # Maven
 target/
-
-# OS
-.DS_Store

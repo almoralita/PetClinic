@@ -1,16 +1,21 @@
 pipeline {
 
     agent any
-    
+
+    environment {
+        BRANCH_NAME = "${env.gitlabSourceBranch}"
+    }
+
     stages {
 
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
-                echo 'Checkout Code test'
-                Checkout scm
+                script {
+                    checkout scm
+                }
             }
         }
-/*
+
         stage('Build') {
             steps {
                 echo 'Build'
@@ -33,21 +38,22 @@ pipeline {
              }
         }
         
-        stage('Deploy') {
-            steps {
-                echo 'Deploy'
-                sh '''
-                    for runName in `docker ps | grep "alpine-petclinic" | awk '{print $1}'`
-                    do
-                        if [ "$runName" != "" ]
-                        then
-                            docker stop $runName
-                        fi
-                    done
-                    docker build -t alpine-petclinic -f Dockerfile.deploy .
-                    docker run --name alpine-petclinic --rm -d -p 9966:8080 alpine-petclinic 
-                '''
+        stage('SonarQube Analysis') {
+            tools {
+               jdk 'JDK 11.0.1'
             }
-        }*/
+            steps {
+                withSonarQubeEnv('SonarQube 6 Community') {
+                  script {
+                    sh "mvn sonar:sonar \
+  -Dsonar.projectKey=TechLabs-TLABS \
+  -Dsonar.host.url=https://umane.everis.com/sonarqubece \
+  -Dsonar.login=91aea770e4896a2581c6780666ca27a1e009f4c5 \
+  -Dsonar.branch.name=$BRANCH_NAME"
+                    }
+                }
+            }
+        }
     }
 }
+

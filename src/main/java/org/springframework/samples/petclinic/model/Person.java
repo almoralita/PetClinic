@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2022 the original author or authors.
+ * Copyright 2002-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 package org.springframework.samples.petclinic.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.validation.constraints.NotEmpty;
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * Simple JavaBean domain object representing an person.
@@ -29,11 +29,11 @@ public class Person extends BaseEntity {
 
     @Column(name = "first_name")
     @NotEmpty
-    protected String firstName;
+    private String firstName;
 
     @Column(name = "last_name")
     @NotEmpty
-    protected String lastName;
+    private String lastName;
 
     public String getFirstName() {
         return this.firstName;
@@ -50,6 +50,5 @@ public class Person extends BaseEntity {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
 
 }
